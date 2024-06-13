@@ -25,7 +25,10 @@ podman run -d \
       -p 127.0.0.1:8080:8080 \
     --network=dev-kit \
     adminer:latest
+```
 
+## Tools
+```bash
 podman run -d \
     --name dev-kit-mail \
       -e TZ=Europe/Andorra \
@@ -37,24 +40,30 @@ podman run -d \
 
 
 ## PHP
-### PHP8.1
 ```bash
-podman build -t dev-kit-php8-1:latest -f php8-1/Podmanfile
+podman build --platform linux/arm64,linux/amd64 -f php8-1/Podmanfile --manifest pcasaspere/dev-kit-containers:php81-laravel
+podman push pcasaspere/dev-kit-containers:php81-laravel
 podman run -d \
-    --name dev-kit-php8-1 \
+    --name dev-kit-php1-2 \
     -v $HOME/code:/app \
     -p 127.0.0.1:8000:8000 \
     --network=dev-kit \
-    dev-kit-php8-1:latest
+    pcasaspere/dev-kit-containers:php81-laravel
+
+podman exec dev-kit-php1-2 php /app/repo/artisan serve --host=0.0.0.0 --port=8000
+
 ```
 
-### PHP8.2
 ```bash
-podman build -t dev-kit-php8-2:latest -f php8-2/Podmanfile
+podman build --platform linux/arm64,linux/amd64 -f php8-2/Podmanfile --manifest pcasaspere/dev-kit-containers:php82-laravel
+podman push pcasaspere/dev-kit-containers:php82-laravel
+
 podman run -d \
     --name dev-kit-php8-2 \
     -v $HOME/code:/app \
     -p 127.0.0.1:8000:8000 \
     --network=dev-kit \
-    dev-kit-php8-2:latest
+    pcasaspere/dev-kit-containers:php82-laravel
+
+podman exec dev-kit-php8-2 php /app/repo/artisan serve --host=0.0.0.0 --port=8000
 ```
